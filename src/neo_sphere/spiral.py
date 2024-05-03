@@ -181,6 +181,17 @@ class NeoSpiral(object):
         else:
             print("Poisson meshes have not been generated yet.")
 
+    def save_meshes(self, output_path="output_mesh.ply", trimmed_path="trimmed_mesh.ply"):
+        if hasattr(self, 'original_mesh_poisson') and hasattr(self, 'mesh_poisson'):
+            # Save the original mesh
+            o3d.io.write_triangle_mesh(output_path, self.original_mesh_poisson)
+            print(f"Original mesh saved to {output_path}")
+            # Save the trimmed mesh
+            o3d.io.write_triangle_mesh(trimmed_path, self.mesh_poisson)
+            print(f"Trimmed mesh saved to {trimmed_path}")
+        else:
+            print("Poisson mesh has not been generated yet.")
+
 
 def calc_nums(vector_len):
     # num_spirals = int(np.ceil(np.sqrt(vector_len) / 2))
