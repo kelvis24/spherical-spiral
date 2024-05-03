@@ -24,7 +24,16 @@ def apply_pca(data):
         pca = PCA(n_components=2, random_state=42)
         return pca.fit_transform(data)
     except Exception as e:
-        print(f"An error occured while applying PCA: {e}")
+        print(f"An error occurred while applying PCA: {e}")
+        return None
+
+
+def apply_pca_3d(data):
+    try:
+        pca = PCA(n_components=3, random_state=42)
+        return pca.fit_transform(data)
+    except Exception as e:
+        print(f"An error occurred while applying PCA: {e}")
         return None
 
 
@@ -129,6 +138,19 @@ def plot_mnist(algo_name, result, labels):
     plt.title(f"{algo_name} of Fashion MNIST Embeddings")
     plt.xlabel(f"{algo_name} 1")
     plt.ylabel(f"{algo_name} 2")
+    plt.show()
+
+
+def plot_mnist_3d(algo_name, result, labels):
+    fig = plt.figure(figsize=(10, 8))
+    ax = fig.add_subplot(111, projection='3d')
+    scatter = ax.scatter(result[:, 0], result[:, 1], result[:, 2], c=labels, cmap='viridis', alpha=0.6)
+    fig.colorbar(scatter, label='Class Labels')
+    ax.set_xlabel(f"x")
+    ax.set_ylabel(f"y")
+    ax.set_zlabel(f"z")
+    plt.title(f"{algo_name} of Fashion MNIST Embeddings")
+    plt.legend()
     plt.show()
 
 
