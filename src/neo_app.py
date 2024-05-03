@@ -1,34 +1,91 @@
 # import os
 import sys
+import time
 
 import numpy as np
 
 from spherical_spiral import SphericalSpiral
 from neo_sphere.spiral import NeoSpiral, calc_nums
 
-from spirals_umap_tsne import load_data, apply_tsne, apply_umap, apply_spiral, apply_neo
+from spirals_umap_tsne import load_data, apply_tsne, apply_umap, apply_spiral, apply_neo, apply_pca_3d
 from spirals_umap_tsne import plot_mnist, manual_apply_neo, dict_manual_apply_neo, plot_embedding
-from spirals_umap_tsne import apply_pca, dict_apply_neo, dict_apply_neo_meshes
+from spirals_umap_tsne import apply_pca, dict_apply_neo, dict_apply_neo_meshes, plot_mnist_3d
 
 from synthetic import generate_synthetic
 
 
 def mnist_comparison():
-    print('Begin neo_app.py')
+    print('Begin mnist_comparison')
 
     images, labels = load_data()
 
+    st_time = time.time()
+    pca_results = apply_pca(images)
+    pca_time = time.time() - st_time
+    plot_mnist('pca', pca_results, labels)
+
+    st_time = time.time()
     tsne_results = apply_tsne(images)
+    tsne_time = time.time() - st_time
     plot_mnist('tsne', tsne_results, labels)
 
+    st_time = time.time()
     umap_results = apply_umap(images)
+    umap_time = time.time() - st_time
     plot_mnist('umap', umap_results, labels)
 
+    st_time = time.time()
     spiral_results = apply_spiral(images)
+    spiral_time = time.time() - st_time
     plot_mnist('spiral', spiral_results, labels)
 
+    st_time = time.time()
     neo_results = apply_neo(images)
+    neo_spiral_time = time.time() - st_time
     plot_mnist('neo', neo_results, labels)
+
+    print(f"pca_time:          {pca_time}")
+    print(f"tsne_time:         {tsne_time}")
+    print(f"umap_time:         {umap_time}")
+    print(f"spiral_time:       {spiral_time}")
+    print(f"neo_spiral_time:   {neo_spiral_time}")
+
+
+def mnist_comparison_3d():
+    print('Begin mnist_comparison_3d')
+
+    images, labels = load_data()
+
+    st_time = time.time()
+    pca_results = apply_pca_3d(images)
+    pca_time = time.time() - st_time
+    plot_mnist_3d('pca', pca_results, labels)
+
+    st_time = time.time()
+    tsne_results = apply_tsne(images)
+    tsne_time = time.time() - st_time
+    plot_mnist_3d('tsne', tsne_results, labels)
+
+    st_time = time.time()
+    umap_results = apply_umap(images)
+    umap_time = time.time() - st_time
+    plot_mnist_3d('umap', umap_results, labels)
+
+    st_time = time.time()
+    spiral_results = apply_spiral(images)
+    spiral_time = time.time() - st_time
+    plot_mnist_3d('spiral', spiral_results, labels)
+
+    st_time = time.time()
+    neo_results = apply_neo(images)
+    neo_spiral_time = time.time() - st_time
+    plot_mnist_3d('neo', neo_results, labels)
+
+    print(f"pca_time:          {pca_time}")
+    print(f"tsne_time:         {tsne_time}")
+    print(f"umap_time:         {umap_time}")
+    print(f"spiral_time:       {spiral_time}")
+    print(f"neo_spiral_time:   {neo_spiral_time}")
 
 
 def spiral_mnist_test():
@@ -167,6 +224,8 @@ def main(args):
         mesh_test()
     elif '--synthetic' in args or argc == 0:
         synthetic_test()
+    elif '--mnist-comparison-3d' in args:
+        mnist_comparison_3d()
     else:
         print('Error: Invalid arguments')
 
